@@ -248,6 +248,56 @@ namespace SkalProj_Datastrukturer_Minne
              * Example of incorrect: (()]), [), {[()}],  List<int> list = new List<int>() { 1, 2, 3, 4 );
              */
 
+            do
+            {
+                Console.WriteLine("Enter a string to check for correct parens matching or 0 to exit to main menu");
+                string input = Console.ReadLine() ?? string.Empty;
+                if (input.Length == 0)
+                {
+                    Console.WriteLine("Please enter some input!");
+                    continue;
+                }
+                if (input == "0")
+                    return;
+
+                if (ValidateParenMatch(input))
+                    Console.WriteLine("Parens match");
+                else
+                    Console.WriteLine("Parens don't match");
+            } while (true);
+
+            static bool ValidateParenMatch(string input)
+            {
+                Stack<char> stack = [];
+                foreach (char next in input)
+                {
+                    switch (next)
+                    {
+                        case '(':
+                        case '{':
+                        case '[':
+                            stack.Push(next);
+                            break;
+                        case ')':
+                        case '}':
+                        case ']':
+                            if (stack.Count == 0)
+                                return false;
+                            char prev = stack.Pop();
+                            bool match = (prev, next) switch
+                            {
+                                ('(', ')') => true,
+                                ('{', '}') => true,
+                                ('[', ']') => true,
+                                _ => false,
+                            };
+                            if (!match)
+                                return false;
+                            break;
+                    }
+                }
+                return stack.Count == 0;
+            }
         }
 
         public static void ReverseText()

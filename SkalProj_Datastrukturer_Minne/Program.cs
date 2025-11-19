@@ -147,6 +147,44 @@ namespace SkalProj_Datastrukturer_Minne
              * Create a switch with cases to enqueue items or dequeue items
              * Make sure to look at the queue after Enqueueing and Dequeueing to see how it behaves
             */
+
+            Queue<string> queue = [];
+            do
+            {
+                Console.WriteLine("Enter +item to enqueue, - to dequeue or 0 to exit to main menu");
+                string input = Console.ReadLine() ?? string.Empty;
+                if (input.Length == 0)
+                {
+                    Console.WriteLine("Please enter some input!");
+                    continue;
+                }
+                char nav = input[0];
+                string value = input[1..];
+                switch (nav)
+                {
+                    case '0':
+                        return;
+                    case '+':
+                        queue.Enqueue(value);
+                        Console.WriteLine($"{value} was added to the queue.");
+                        break;
+                    case '-':
+                        if (queue.Count > 0)
+                        {
+                            string dequeued = queue.Dequeue();
+                            Console.WriteLine($"{dequeued} was removed from the queue.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Queue is empty, cannot dequeue.");
+                        }
+                        break;
+                    default:
+                        Console.WriteLine("Please use +item to enqueue or - to dequeue items from the queue, or 0 to exit to main menu");
+                        continue;
+                }
+                Console.WriteLine($"Queue now contains {queue.Count} items.");
+            } while (true);
         }
 
         /// <summary>

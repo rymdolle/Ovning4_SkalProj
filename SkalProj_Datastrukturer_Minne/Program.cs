@@ -18,6 +18,7 @@ namespace SkalProj_Datastrukturer_Minne
                     + "\n2. Examine a Queue"
                     + "\n3. Examine a Stack"
                     + "\n4. CheckParenthesis"
+                    + "\n5. Reverse text"
                     + "\n0. Exit the application");
                 char input = ' '; //Creates the character input to be used with the switch-case below.
                 try
@@ -42,6 +43,9 @@ namespace SkalProj_Datastrukturer_Minne
                         break;
                     case '4':
                         CheckParanthesis();
+                        break;
+                    case '5':
+                        ReverseText();
                         break;
                     /*
                      * Extend the menu to include the recursive 
@@ -197,6 +201,43 @@ namespace SkalProj_Datastrukturer_Minne
              * Create a switch with cases to push or pop items
              * Make sure to look at the stack after pushing and and poping to see how it behaves
             */
+
+            Stack<string> stack = [];
+            do
+            {
+                Console.WriteLine("Enter +item to push, - to pop or 0 to exit to main menu");
+                string input = Console.ReadLine() ?? string.Empty;
+                if (input.Length == 0)
+                {
+                    Console.WriteLine("Please enter some input!");
+                    continue;
+                }
+                char nav = input[0];
+                string value = input[1..];
+                switch (nav)
+                {
+                    case '0':
+                        return;
+                    case '+':
+                        stack.Push(value);
+                        Console.WriteLine($"{value} was added to the stack.");
+                        break;
+                    case '-':
+                        if (stack.Count > 0)
+                        {
+                            string popped = stack.Pop();
+                            Console.WriteLine($"{popped} was removed from the stack.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Stack is empty, cannot pop.");
+                        }
+                        break;
+                    default:
+                        Console.WriteLine("Please use +item to push or - to pop items from the stack, or 0 to exit to main menu");
+                        continue;
+                }
+            } while (true);
         }
 
         static void CheckParanthesis()
@@ -209,6 +250,32 @@ namespace SkalProj_Datastrukturer_Minne
 
         }
 
+        public static void ReverseText()
+        {
+            do
+            {
+                Console.WriteLine("Enter text to reverse or 0 to exit to main menu");
+                string input = Console.ReadLine() ?? string.Empty;
+                if (input.Length == 0)
+                {
+                    Console.WriteLine("Please enter some input!");
+                    continue;
+                }
+                if (input == "0")
+                    return;
+                PrintReverseWithStack(input);
+            } while (true);
+
+            static void PrintReverseWithStack(string input)
+            {
+                Stack<char> stack = new(input);
+                //foreach (char c in input)
+                //    stack.Push(c);
+                while (stack.Count > 0)
+                    Console.Write(stack.Pop());
+                Console.WriteLine();
+            }
+        }
     }
 }
 

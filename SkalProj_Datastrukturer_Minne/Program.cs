@@ -19,6 +19,7 @@ namespace SkalProj_Datastrukturer_Minne
                     + "\n3. Examine a Stack"
                     + "\n4. CheckParenthesis"
                     + "\n5. Reverse text"
+                    + "\n6. Recursion"
                     + "\n0. Exit the application");
                 char input = ' '; //Creates the character input to be used with the switch-case below.
                 try
@@ -46,6 +47,9 @@ namespace SkalProj_Datastrukturer_Minne
                         break;
                     case '5':
                         ReverseText();
+                        break;
+                    case '6':
+                        Recursion();
                         break;
                     /*
                      * Extend the menu to include the recursive 
@@ -326,6 +330,119 @@ namespace SkalProj_Datastrukturer_Minne
                 Console.WriteLine();
             }
         }
+
+        private static void Recursion()
+        {
+            do
+            {
+                Console.WriteLine($"Select an option:");
+                Console.WriteLine("1. Recursive Even");
+                Console.WriteLine("2. Recursive Fibonacci");
+                Console.WriteLine("3. Recursive Fibonacci (tail call)");
+                Console.WriteLine("4. Iterative Even");
+                Console.WriteLine("5. Iterative Fibonacci");
+                Console.WriteLine("0. Exit to main menu");
+
+                string input = Console.ReadLine() ?? string.Empty;
+                if (input.Length == 0)
+                {
+                    Console.WriteLine("Please enter some input!");
+                    continue;
+                }
+                Dictionary<string, Func<int,int>> menu = new()
+                {
+                    {"1", RecursiveEven},
+                    {"2", RecursiveFibonacci},
+                    {"3", RecursiveFibonacciTailCall},
+                    {"4", IterativeEven},
+                    {"5", IterativeFibonacci},
+                };
+
+                if (input == "0")
+                    return;
+
+                if (!menu.ContainsKey(input))
+                {
+                    Console.WriteLine($"Please enter a valid choice!");
+                    continue;
+                }
+
+                Console.WriteLine("Enter a number n to compute:");
+                if (!int.TryParse(Console.ReadLine(), out int n) || n < 0)
+                {
+                    Console.WriteLine("Please enter a valid non-negative integer!");
+                    continue;
+                }
+
+                int result = menu[input].Invoke(n);
+                Console.WriteLine($"Result: {result}");
+            } while (true);
+        }
+
+
+        // 5.2. Skriv en RecursiveEven(int n) metod som rekursivt beräknar det n:te jämna talet.
+        public static int RecursiveEven(int n)
+        {
+            if (n <= 0) return 0;
+            return RecursiveEven(n - 1) + 2;
+        }
+
+        // 5.3. Implementera en rekursiv funktion för att beräkna tal i fibonaccisekvensen: (f(n) =f(n-1) + f(n-2))
+        public static int RecursiveFibonacci(int n)
+        {
+            if (n <= 0) return 0;
+            if (n == 1) return 1;
+            return RecursiveFibonacci(n - 1) + RecursiveFibonacci(n - 2);
+        }
+
+        // Fib with tail recursion for possible tail call optimization
+        public static int RecursiveFibonacciTailCall(int n) => RecursiveFibonacciTailCall(n, 0, 1);
+        public static int RecursiveFibonacciTailCall(int n, int x, int y)
+        {
+            if (n <= 0) return x;
+            if (n == 1) return y;
+            return RecursiveFibonacciTailCall(n-1, y, x+y);
+        }
+
+        // 6.2. Skapa en IterativeEven(int n) funktion för att iterativt beräkna det n:te jämna talet.
+        public static int IterativeEven(int n)
+        {
+            int result = 0;
+            for (int i = 0; i < n; i++)
+                result += 2;
+            return result;
+        }
+
+        // 6.3. Implementera en iterativ version av fibonacciberäknaren
+        public static int IterativeFibonacci(int n)
+        {
+            if (n == 0) return 0;
+            if (n == 1) return 1;
+            int x = 0;
+            int y = 1;
+            int result = 0;
+            for (int i = 2; i <= n; i++)
+            {
+                result = x + y;
+                x = y;
+                y = result;
+            }
+            return result;
+        }
+
+        // Fråga: Utgå ifrån era nyvunna kunskaper om iteration, rekursion och
+        // minneshantering. Vilken av ovanstående funktioner är mest
+        // minnesvänlig och varför?
+        //
+        // Den rekursiva versionen skapar en ny stack frame för varje anrop
+        // vilket gör att call stacken växer och använder mer minne. Den
+        // iterativa versionen behöver inget extra minne för varje iteration,
+        // utan använder bara några variabler för resultat och
+        // mellanlagring. Det gör den iterativa versionen mer minnesvänlig.
+        // Om Tail Call Optimization (TCO) är implementerat i kompilatorn kan
+        // den rekursiva versionen med tail call vara lika minnesvänlig som
+        // den iterativa versionen, eftersom TCO kan optimera bort stack
+        // frames och göra om det till iteration.
     }
 }
 

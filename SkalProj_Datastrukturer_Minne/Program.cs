@@ -78,6 +78,63 @@ namespace SkalProj_Datastrukturer_Minne
             //string value = input.substring(1);
 
             //switch(nav){...}
+
+            /*
+             * 1. Skriv klart implementationen av ExamineList-metoden så att undersökningen blir
+             *    genomförbar.
+             *
+             * 2. När ökar listans kapacitet ? (Alltså den underliggande arrayens storlek)
+             *    Listans kapacitet ökar när man försöker lägga till ett element och listans kapacitet är full.
+             *
+             * 3. Med hur mycket ökar kapaciteten?
+             *    Kapaciteten på listan fördubblas när den ökar.
+             *
+             * 4. Varför ökar inte listans kapacitet i samma takt som element läggs till?
+             *    Listans kapacitet ökar endast när den underliggande arrayen är full för att inte behöva kopiera innehållet varje gång ett element läggs till.
+             *    Istället tar man höjd för framtida tillägg genom att öka kapaciteten med en större mängd än bara ett element.
+             *
+             * 5. Minskar kapaciteten när element tas bort ur listan?
+             *    Nej, kapaciteten minskar inte automatiskt.
+             *
+             * 6. När är det då fördelaktigt att använda en egendefinierad array istället för en lista?
+             *    När kapaciteten är känd på förhand och inte kommer behöva ändras.
+             */
+            Console.WriteLine("Enter +item to add an item, -item to remove an item or 0 to exit to main menu");
+            List<string> list = [];
+            do
+            {
+                string input = Console.ReadLine() ?? string.Empty;
+                if (input.Length == 0)
+                {
+                    Console.WriteLine("Please enter some input!");
+                    continue;
+                }
+                char nav = input[0];
+                string value = input[1..];
+                int oldCapacity = list.Capacity;
+
+                switch (nav)
+                {
+                    case '0':
+                        return;
+                    case '+' when value.Length > 0:
+                        list.Add(value);
+                        Console.WriteLine($"Added {value} to the list");
+                        break;
+                    case '-':
+                        if (list.Remove(value))
+                            Console.WriteLine($"Removed {value} from the list");
+                        else
+                            Console.WriteLine($"{value} was not found in the list");
+                        break;
+                    default:
+                        Console.WriteLine("Please use +item or -item to add or remove items from the list, or 0 to go back");
+                        continue;
+                }
+                Console.WriteLine($"List now contains {list.Count} items with a capacity of {list.Capacity}");
+                if (oldCapacity != list.Capacity)
+                    Console.WriteLine($"List capacity has changed from {oldCapacity}!");
+            } while (true);
         }
 
         /// <summary>
